@@ -2,23 +2,16 @@ Attribute VB_Name = "Module1"
 Sub MultipleYearStockData():
 
     For Each ws In Worksheets
-    
+        'Set the variable
         Dim WorksheetName As String
-        'Start row of ticker block
         Dim j As Long
-        'Index counter to fill Ticker row
         Dim start As Long
-        'Last row column A
+        'Last row column
         Dim LastRowA As Long
-        'last row column I
         Dim LastRowI As Long
-        'Variable for percent change calculation
         Dim Percent_Change As Double
-        'Variable for greatest increase calculation
         Dim GreatIncr As Double
-        'Variable for greatest decrease calculation
         Dim GreatDecr As Double
-        'Variable for greatest total volume
         Dim GreatVol As Double
         
         'Get the WorksheetName
@@ -38,7 +31,7 @@ Sub MultipleYearStockData():
         'Set the start row
         start = 2
         
-        'Set start row to 2
+        'Set the result table's start row is 2
         j = 2
         
         'Find the last non-blank cell in column A
@@ -50,26 +43,20 @@ Sub MultipleYearStockData():
                 'Check if ticker name changed
                 If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
                 
-                'Write ticker in column I (#9)
                 ws.Cells(start, 9).Value = ws.Cells(i, 1).Value
                 
-                'Calculate and write Yearly Change in column J (#10)
                 ws.Cells(start, 10).Value = ws.Cells(i, 6).Value - ws.Cells(j, 3).Value
                 
                     'Conditional formating
                     If ws.Cells(start, 10).Value < 0 Then
-                
-                    'Set cell background color to red
                     ws.Cells(start, 10).Interior.ColorIndex = 3
                 
                     Else
-                
-                    'Set cell background color to green
                     ws.Cells(start, 10).Interior.ColorIndex = 4
                 
                     End If
                     
-                    'Calculate and write percent change in column K (#11)
+                    'Calculate percent change in column K
                     If ws.Cells(j, 3).Value <> 0 Then
                     Percent_Change = ((ws.Cells(i, 6).Value - ws.Cells(j, 3).Value) / ws.Cells(j, 3).Value)
                     
@@ -82,13 +69,9 @@ Sub MultipleYearStockData():
                     
                     End If
                     
-                'Calculate and write total volume in column L (#12)
                 ws.Cells(start, 12).Value = WorksheetFunction.Sum(Range(ws.Cells(j, 7), ws.Cells(i, 7)))
                 
-                'Increase start by 1
                 start = start + 1
-                
-                'Set new start row of the ticker block
                 j = i + 1
                 
                 End If
@@ -103,10 +86,10 @@ Sub MultipleYearStockData():
         GreatIncr = ws.Cells(2, 11).Value
         GreatDecr = ws.Cells(2, 11).Value
         
-            'Loop for summary
+            'Loop for summary table
             For i = 2 To LastRowI
             
-                'For greatest total volume--check if next value is larger--if yes take over a new value and populate ws.Cells
+                'For greatest total volume
                 If ws.Cells(i, 12).Value > GreatVol Then
                 GreatVol = ws.Cells(i, 12).Value
                 ws.Cells(4, 16).Value = ws.Cells(i, 9).Value
@@ -117,7 +100,7 @@ Sub MultipleYearStockData():
                 
                 End If
                 
-                'For greatest increase--check if next value is larger--if yes take over a new value and populate ws.Cells
+                'For greatest increase
                 If ws.Cells(i, 11).Value > GreatIncr Then
                 GreatIncr = ws.Cells(i, 11).Value
                 ws.Cells(2, 16).Value = ws.Cells(i, 9).Value
@@ -128,7 +111,7 @@ Sub MultipleYearStockData():
                 
                 End If
                 
-                'For greatest decrease--check if next value is smaller--if yes take over a new value and populate ws.Cells
+                'For greatest decrease
                 If ws.Cells(i, 11).Value < GreatDecr Then
                 GreatDecr = ws.Cells(i, 11).Value
                 ws.Cells(3, 16).Value = ws.Cells(i, 9).Value
@@ -146,9 +129,8 @@ Sub MultipleYearStockData():
             
             Next i
             
-        'Djust column width automatically
-        Worksheets(WorksheetName).Columns("A:Z").AutoFit
             
     Next ws
         
 End Sub
+
